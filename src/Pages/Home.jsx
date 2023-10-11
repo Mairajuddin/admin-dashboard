@@ -28,7 +28,7 @@ const Home = () => {
   ];
   const users = [
     { name: "ARHAM KHAN", email: "arhamkhancs99@gmail.com" },
-    { name: "Melissa Doe", email: "Melissa5R9@example.com" },
+    { name: "Qazi Mairaj", email: "mairaj875@example.com" },
     { name: "Peter Parker", email: "peter5R9@example.com" },
     { name: "John Moreno", email: "Moreno5R9@example.com" },
     { name: "Sara Peterson", email: "speterson5R9@example.com" },
