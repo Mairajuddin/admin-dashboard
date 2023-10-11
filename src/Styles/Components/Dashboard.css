@@ -1,0 +1,67 @@
+.custom-sidebar{
+    background-color: #253544!important;
+    color: #fff !important;
+}
+.sidebar-image {
+    max-width: 40%;
+    height: 10%;
+    text-align: left;
+    /* margin-right: 3rem; */
+    /* flex-shrink: 0; */
+    margin-bottom: 0;
+}
+.sidebar-top-icon {
+
+justify-content: center;
+align-items: center;
+  
+}
+.sidebar-top-icon-Typo{
+font-family: 'Elianto', sans-serif ;
+margin-top: 28px!important;
+}
+.sidebar {
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+height: 100%;
+}
+.top-sidebar {
+flex-grow: 1;
+}
+
+/* .down-sidebar {
+margin-top: auto;
+} */
+.active-icon {
+color: #fff !important;
+}
+.active-button {
+background-color: #272222 !important;
+width: min-content !important;
+flex-shrink: 0;
+border-top-left-radius: 50px !important;
+border-bottom-left-radius: 0 !important;
+border-top-right-radius: 50px !important;
+border-bottom-right-radius: 50px !important;
+margin: 10px 25px !important;
+
+
+}
+
+.active-button span {
+color: white;
+}
+/* .avatar-navbar {
+position: absolute;
+} */
+@media (max-width: 414px) {
+.top-sidebar {
+  flex-grow: 0.3 ; 
+}
+.sidebar{
+  flex-grow: 0.7
+}
+}
+
+
