@@ -27,7 +27,7 @@ const Home = () => {
     { title: "Rate", value: "90%" },
   ];
   const users = [
-    { name: "John Doe", email: "jQ5R9@example.com" },
+    { name: "ARHAM KHAN", email: "arhamkhancs99@gmail.com" },
     { name: "Melissa Doe", email: "Melissa5R9@example.com" },
     { name: "Peter Parker", email: "peter5R9@example.com" },
     { name: "John Moreno", email: "Moreno5R9@example.com" },
