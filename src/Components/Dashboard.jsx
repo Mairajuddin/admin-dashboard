@@ -34,6 +34,7 @@ export default function Dashboard() {
 
   const navigate = useNavigate()
   const handleDrawerOpen = () => setOpen(!open);
+  const handleDrawerClose = () => setOpen(false);
 
   const handleButtonClick = (buttonId) => {
     setActiveButton(buttonId);
@@ -78,7 +79,7 @@ export default function Dashboard() {
       </AppBar>
       <Drawer
         sx={{
-          // display:{xs:'none',lg:'block'},
+          //  display:{xs:'none',md:'block'},
           width: drawerWidth,
           flexShrink: 0,
           "& .MuiDrawer-paper": {
@@ -88,9 +89,13 @@ export default function Dashboard() {
           zIndex: 1,
          
         }}
-        variant="persistent"
+        variant="temporary"
         anchor="left"
         open={open}
+         onClose={handleDrawerClose}
+        ModalProps={{
+          keepMounted: true, // Better open performance on mobile.
+        }}
         
       >
         <DrawerHeader sx={{ justifyContent: "center",alignItems: "center" ,background: "#253544",color: "white",borderTopRightRadius:'10%',borderTopLeftRadius:'10%', marginTop:'1px'}}>
@@ -103,7 +108,7 @@ export default function Dashboard() {
                 <ListItemButton
                   onClick={() => handleButtonClick(text)}
                 >
-                  <ListItemIcon
+                  <ListItemIcon 
                     // className={activeButton === text ? "active-icon" : ""}
                     sx={{ color: "white" }}
                   >

@@ -55,13 +55,17 @@ color: white;
 /* .avatar-navbar {
 position: absolute;
 } */
-@media (max-width: 414px) {
+/* @media (max-width: 414px) {
 .top-sidebar {
   flex-grow: 0.3 ; 
 }
 .sidebar{
   flex-grow: 0.7
 }
+} */
+@media (max-width:415px){
+  .sidebar-drawer{
+    height: 100px;
+  }
 }
-
 
