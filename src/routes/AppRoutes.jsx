@@ -7,6 +7,7 @@ import { ContextApi } from "../Components/ContextProvider";
 import { getLocalStorage } from "../LocalStorage";
 import AuthComponent from "../Components/AuthComponent";
 import Home from "../Pages/Home";
+import UsersPages from "../Pages/UsersPages";
 
 const Root = () => {
     const location=useLocation();
@@ -48,6 +49,7 @@ const AppRoutes = () => {
         <Route element={<Outlet />}>
           <Route path='/' element={<Dashboard />}>
             <Route index element={<Home />} />
+            <Route path="users" element={<UsersPages />}/>
           </Route>
         </Route>
       </Route>

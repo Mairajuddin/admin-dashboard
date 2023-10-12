@@ -19,6 +19,7 @@ import { Icon } from '@iconify/react';
 import AppBar from "@mui/material/AppBar";
 import { Outlet } from "react-router-dom";
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import { useNavigate } from "react-router-dom";
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
@@ -31,13 +32,25 @@ export default function Dashboard() {
   const [open, setOpen] = React.useState(false);
   const [activeButton, setActiveButton] = useState(false);
 
+  const navigate = useNavigate()
   const handleDrawerOpen = () => setOpen(!open);
 
   const handleButtonClick = (buttonId) => {
     setActiveButton(buttonId);
+    switch (buttonId) {
+      case 'Dashboard':
+        navigate('/');
+        break;
+      case 'User':
+        navigate('/users'); 
+        break;
+      default:
+        break;
+    }
   };
 
   const drawerWidth = 240;
+  
 
   return (
     <Box sx={{ width: "100%", height: "100vh" }}>
@@ -88,9 +101,7 @@ export default function Dashboard() {
             {["Dashboard", "Offers", "User","Business","Bot"].map((text, index) => (
               <ListItem key={text} disablePadding>
                 <ListItemButton
-                //   className={activeButton === text ? "active-button" : ""}
                   onClick={() => handleButtonClick(text)}
-                  
                 >
                   <ListItemIcon
                     // className={activeButton === text ? "active-icon" : ""}
