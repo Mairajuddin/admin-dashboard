@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Box, Grid, Button, Typography, Modal, Fade} from "@mui/material";
-import TextField from '@mui/material/TextField';
+import { Box, Grid, Button, Typography, Modal, Fade } from "@mui/material";
+import TextField from "@mui/material/TextField";
 import { DataGrid } from "@mui/x-data-grid";
 import RuleIcon from "@mui/icons-material/Rule";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { DeleteOutline } from "@mui/icons-material";
 import Backdrop from "@mui/material/Backdrop";
+import DeletePostModal from "../Components/DeletePostModal";
 
 const style = {
   position: "absolute",
@@ -37,57 +38,60 @@ const ViewModal = ({ isOpen, onClose, data }) => {
         }}
       >
         <Fade in={isOpen}>
-        <Box   noValidate sx={style}>
+          <Box noValidate sx={style}>
             <Typography>Influencer Details</Typography>
-            <Grid container spacing={2} >
-                <Grid item xs={6}>
-            <TextField
-              margin="normal"
-              label="User ID"
-              required
-              fullWidth
-              value={data.userId}
-              autoFocus
-            />
-            </Grid>
-           <Grid item xs={6}>
-            <TextField
-              margin="normal"
-              label="Post Id" 
-              required
-              fullWidth
-              value={data.id}
-            />
-            </Grid>
-            <Grid item xs={12}>
-            <TextField
-              margin="normal"
-              label="Phone" 
-              required
-              fullWidth
-              multiline
-              value={data.title}
-            />
-            </Grid>
-            <Grid item xs={12}>
-            <TextField
-            //   margin="normal"
-              label="Body" 
-              required
-              fullWidth
-              value={data.body}
-              multiline
-              maxRows={4}
-            />
-            </Grid>
-            <Grid item xs={12} >
-            
-            </Grid>
-            
-            <Grid item xs={12} >
-            <Button variant="contained" style={{ width: "100%"}} onClick={()=>onClose()}>Close</Button>
-            </Grid>
-            
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <TextField
+                  margin="normal"
+                  label="User ID"
+                  required
+                  fullWidth
+                  value={data.userId}
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  margin="normal"
+                  label="Post Id"
+                  required
+                  fullWidth
+                  value={data.id}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  margin="normal"
+                  label="Phone"
+                  required
+                  fullWidth
+                  multiline
+                  value={data.title}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  //   margin="normal"
+                  label="Body"
+                  required
+                  fullWidth
+                  value={data.body}
+                  multiline
+                  maxRows={4}
+                />
+              </Grid>
+              <Grid item xs={12}></Grid>
+
+              <Grid item xs={12}>
+                <Button
+                  variant="contained"
+                  style={{ width: "100%" }}
+                  onClick={() => onClose()}
+                >
+                  Close
+                </Button>
+              </Grid>
             </Grid>
           </Box>
         </Fade>
@@ -101,6 +105,8 @@ const Posts = () => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedViewRow, setSelectedViewData] = useState(null);
   const [rowData, setRowData] = useState([]);
+  const [OpenDeleteModal, setOpenDeleteModal] = useState(false);
+  const [DeletSelectedRow, setDeletSelectedRow] = useState([]);
 
   const columns = [
     { field: "id", headerName: "ID", flex: 1, minWidth: 70 },
@@ -113,8 +119,8 @@ const Posts = () => {
       flex: 2,
       renderCell: (params) => (
         <div>
-             <VisibilityOutlinedIcon
-            style={{ cursor: "pointer" ,marginRight: "20px" }}
+          <VisibilityOutlinedIcon
+            style={{ cursor: "pointer", marginRight: "20px" }}
             onClick={() => handleView(params.row)}
           />
           <RuleIcon style={{ cursor: "pointer", marginRight: "20px" }} />
@@ -122,10 +128,9 @@ const Posts = () => {
             style={{ cursor: "pointer" }}
             onClick={() => {
               setDeletSelectedRow(params.row);
-              setOpen(true);
+              setOpenDeleteModal(true);
             }}
           />
-         
         </div>
       ),
     },
@@ -164,6 +169,34 @@ const Posts = () => {
   };
   const handleClose = () => {
     setOpenModal(false);
+    setOpenDeleteModal(false);
+  };
+  const handleDelete = async () => {
+    const url = `https://jsonplaceholder.typicode.com/posts/${DeletSelectedRow.id}`;
+    try {
+      const response = await fetch(url, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.ok) {
+        setRows((prevRows) =>
+          prevRows.filter((row) => row.id !== DeletSelectedRow.id)
+        );
+        setRows((prevRows) =>
+          prevRows.map((row, index) => ({
+            ...row,
+            id: index + 1,
+          }))
+        );
+        setOpenDeleteModal(false);
+      } else {
+        console.log("failed to delete");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -188,7 +221,7 @@ const Posts = () => {
           initialState={{
             pagination: {
               paginationModel: {
-                pageSize: 4,
+                pageSize: 5,
               },
             },
           }}
@@ -204,6 +237,12 @@ const Posts = () => {
         dataView={selectedViewRow}
         data={rowData}
         onClose={handleClose}
+      />
+      <DeletePostModal
+        isOpen={OpenDeleteModal}
+        onClose={handleClose}
+        onDelete={handleDelete}
+        data={DeletSelectedRow}
       />
     </Box>
   );
