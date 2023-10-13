@@ -85,16 +85,16 @@ const UsersPages = () => {
 
     
   const columns = [
-    {field : 'id', headerName:'ID', flex : -10, },
-    {field:'profile',headerName:'Profile',flex : -7 ,renderCell: (params) =>(
-      <Icon icon="mdi:account-circle" width="29" height="29" />)},
-    {field: 'name',headerName:'Name',flex : 1, },
-    {field:'age',headerName:'Age',flex : 1, },
-    {field:'phone',headerName:'Phone',flex : 1,},
-    {field:'city',headerName:'City',flex : 1, },
-    {field:'country',headerName:'Country',flex : 1, },
+    {field : 'id', headerName:'ID' ,  flex: 1 , minWidth:70 },
+    {field:'profile',headerName:'Profile',flex: 1, minWidth:70,    renderCell: (params) =>(
+       <Icon icon="mdi:account-circle"  height="29"  />)},
+    {field: 'name',headerName:'Name',flex: 2 , minWidth:170    },
+    {field:'age',headerName:'Age',flex: 1,      },
+    {field:'phone',headerName:'Phone',flex: 2,     },
+    {field:'city',headerName:'City',flex: 2,   minWidth:100   },
+    {field:'country',headerName:'Country',flex: 2, minWidth:120     },
      { field: 'remove', headerName: 'Actions', flex: 1, width: 80, renderCell: (params) => (
-        <div style={{ display: 'flex' , alignItems: 'center' ,justifyContent: 'space-around'}}>
+        <div >
           <RuleIcon style={{ cursor: 'pointer', marginRight: '20px' }} />
           <DeleteOutline 
             style={{ cursor: 'pointer' }} 
@@ -150,6 +150,7 @@ const UsersPages = () => {
     <DataGrid
       rows={GridRows}
       columns={columns}
+      disableColumnMenu={true}
       initialState={{
         pagination: {
           paginationModel: {
@@ -159,6 +160,7 @@ const UsersPages = () => {
       }}
       checkboxSelection
       disableRowSelectionOnClick
+      // disableColumnResize 
     />
       <ModalDelete data={deletSelectedRow} isOpen={open} onClose={handleClose} 
     handleRemoveClick={handleRemoveClick}/>

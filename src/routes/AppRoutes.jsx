@@ -8,6 +8,7 @@ import { getLocalStorage } from "../LocalStorage";
 import AuthComponent from "../Components/AuthComponent";
 import Home from "../Pages/Home";
 import UsersPages from "../Pages/UsersPages";
+import Posts from "../Pages/Posts";
 
 const Root = () => {
     const location=useLocation();
@@ -50,6 +51,7 @@ const AppRoutes = () => {
           <Route path='/' element={<Dashboard />}>
             <Route index element={<Home />} />
             <Route path="users" element={<UsersPages />}/>
+            <Route path="posts" element={<Posts/>}/>
           </Route>
         </Route>
       </Route>

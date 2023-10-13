@@ -7,6 +7,7 @@ import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -45,12 +46,15 @@ export default function Dashboard() {
       case 'User':
         navigate('/users'); 
         break;
+      case 'Posts':
+        navigate('/posts');
       default:
         break;
     }
   };
 
   const drawerWidth = 240;
+  const screenSize = window.innerWidth;
   
 
   return (
@@ -89,7 +93,7 @@ export default function Dashboard() {
           zIndex: 1,
          
         }}
-        variant="temporary"
+        variant={screenSize<=500?"temporary":"persistent"}
         anchor="left"
         open={open}
          onClose={handleDrawerClose}
@@ -103,7 +107,7 @@ export default function Dashboard() {
         </DrawerHeader>
         <div className="sidebar">
           <List className="top-sidebar" sx={{backgroundColor:'#253544',color: "white"}}>
-            {["Dashboard", "Offers", "User","Business","Bot"].map((text, index) => (
+            {["Dashboard", "Offers", "User","Business","Bot","Posts"].map((text, index) => (
               <ListItem key={text} disablePadding>
                 <ListItemButton
                   onClick={() => handleButtonClick(text)}
@@ -121,6 +125,7 @@ export default function Dashboard() {
                     ) : index===3?(
                     <BusinessCenterIcon/>
                     ): index===4?(<SmartToyIcon/>)
+                    : index === 5?(<UploadFileIcon/>)
                     : null}
                   </ListItemIcon>
                   <ListItemText primary={text} />
