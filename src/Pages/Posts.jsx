@@ -4,9 +4,10 @@ import TextField from "@mui/material/TextField";
 import { DataGrid } from "@mui/x-data-grid";
 import RuleIcon from "@mui/icons-material/Rule";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import { DeleteOutline } from "@mui/icons-material";
+import { ContactPageSharp, DeleteOutline } from "@mui/icons-material";
 import Backdrop from "@mui/material/Backdrop";
 import DeletePostModal from "../Components/DeletePostModal";
+import UpdatePostModal from "../Components/UpdatePostModal";
 
 const style = {
   position: "absolute",
@@ -21,7 +22,6 @@ const style = {
 };
 
 const ViewModal = ({ isOpen, onClose, data }) => {
-  console.log(data, "view modal  data");
   return (
     <div>
       <Modal
@@ -39,7 +39,7 @@ const ViewModal = ({ isOpen, onClose, data }) => {
       >
         <Fade in={isOpen}>
           <Box noValidate sx={style}>
-            <Typography>Influencer Details</Typography>
+            <Typography>Post Details</Typography>
             <Grid container spacing={2}>
               <Grid item xs={6}>
                 <TextField
@@ -72,7 +72,6 @@ const ViewModal = ({ isOpen, onClose, data }) => {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  //   margin="normal"
                   label="Body"
                   required
                   fullWidth
@@ -103,10 +102,10 @@ const ViewModal = ({ isOpen, onClose, data }) => {
 const Posts = () => {
   const [Rows, setRows] = useState([]);
   const [openModal, setOpenModal] = useState(false);
-  const [selectedViewRow, setSelectedViewData] = useState(null);
   const [rowData, setRowData] = useState([]);
   const [OpenDeleteModal, setOpenDeleteModal] = useState(false);
-  const [DeletSelectedRow, setDeletSelectedRow] = useState([]);
+  const[openUpdateModal,setOpenUpdateModal]=useState(false)
+  
 
   const columns = [
     { field: "id", headerName: "ID", flex: 1, minWidth: 70 },
@@ -123,11 +122,16 @@ const Posts = () => {
             style={{ cursor: "pointer", marginRight: "20px" }}
             onClick={() => handleView(params.row)}
           />
-          <RuleIcon style={{ cursor: "pointer", marginRight: "20px" }} />
+          <RuleIcon style={{ cursor: "pointer", marginRight: "20px" }}
+          onClick={() => {
+            setRowData(params.row);
+            setOpenUpdateModal(true);
+          }}
+          />
           <DeleteOutline
             style={{ cursor: "pointer" }}
             onClick={() => {
-              setDeletSelectedRow(params.row);
+              setRowData(params.row);
               setOpenDeleteModal(true);
             }}
           />
@@ -164,15 +168,15 @@ const Posts = () => {
 
   const handleView = (row) => {
     setOpenModal(true);
-    setSelectedViewData(row);
     setRowData(row);
   };
   const handleClose = () => {
     setOpenModal(false);
     setOpenDeleteModal(false);
+    setOpenUpdateModal(false);
   };
   const handleDelete = async () => {
-    const url = `https://jsonplaceholder.typicode.com/posts/${DeletSelectedRow.id}`;
+    const url = `https://jsonplaceholder.typicode.com/posts/${rowData.id}`;
     try {
       const response = await fetch(url, {
         method: "DELETE",
@@ -182,7 +186,7 @@ const Posts = () => {
       });
       if (response.ok) {
         setRows((prevRows) =>
-          prevRows.filter((row) => row.id !== DeletSelectedRow.id)
+          prevRows.filter((row) => row.id !== rowData.id)
         );
         setRows((prevRows) =>
           prevRows.map((row, index) => ({
@@ -198,6 +202,52 @@ const Posts = () => {
       console.log(error);
     }
   };
+  const handleUpdate = (updatedData) => {
+    // Update the rows in your state
+    setRows((prevRows) =>
+      prevRows.map((row) => (row.id === updatedData.id ? updatedData : row))
+    );
+  };
+  // const handleUpdate= async ()=>{
+  //   const url  =`https://jsonplaceholder.typicode.com/posts/${rowData.id}`
+  //   try{
+  //     const response= await fetch (url,{
+  //       method:'PUT',
+  //       headers:{
+  //         'Content-Type':'application/json ; charset=UTF-8',
+  //       },
+  //       body:JSON.stringify({
+  //         id:rowData.id,
+  //         title:rowData.title,
+  //         body:rowData.body,
+  //         userId:rowData.userId
+  //       }),
+  //    })
+  //    if (response.ok){
+  //     console.log('its working success')
+  //     rowData.userID=response.data.userId;
+  //     rowData.title=response.data.title;
+  //     rowData.body=response.data.body;
+  //     console.log('success')
+  //     handleClose()
+
+  //     setRows((prevRows)=>prevRows.map((row,index)=>{
+  //       if(row.id===rowData.id){
+  //         return rowData
+  //       }
+  //       return row;
+  //     }))
+
+
+  //    } else{
+  //     console.log('failed to update')
+  //    }
+
+  //   }catch(error){
+  //     console.log('error',error)
+
+  //   }
+  // }
 
   return (
     <Box style={{ padding: "20px" }}>
@@ -234,7 +284,7 @@ const Posts = () => {
       </Box>
       <ViewModal
         isOpen={openModal}
-        dataView={selectedViewRow}
+        dataView={rowData}
         data={rowData}
         onClose={handleClose}
       />
@@ -242,8 +292,14 @@ const Posts = () => {
         isOpen={OpenDeleteModal}
         onClose={handleClose}
         onDelete={handleDelete}
-        data={DeletSelectedRow}
+        data={rowData}
       />
+      <UpdatePostModal
+        isOpen={openUpdateModal}
+        onClose={handleClose}
+        onUpdate={handleUpdate}
+        data={rowData}
+        />
     </Box>
   );
 };
