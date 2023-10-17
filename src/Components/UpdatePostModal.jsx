@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Grid, Button, Typography, Modal, Fade } from "@mui/material";
 import Backdrop from "@mui/material/Backdrop";
 import TextField from "@mui/material/TextField";
+import useUpdatePostModal from "../hooks/useUpdatePostModal";
 
 const style = {
   position: "absolute",
@@ -16,54 +17,13 @@ const style = {
 };
 
 const UpdatePostModal = ({ onClose, isOpen, data, onUpdate }) => {
-  const [formData, setFormData] = useState({});
   useEffect(() => {
     setFormData({ ...data });
   }, [data]);
 
-  // .log(formData, "formData");
-  const handleUpdate = (e) => {
-    const { name, value } = e.target;
-
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-
-  const handleSubmit = async () => {
-    
-    const url = `https://jsonplaceholder.typicode.com/posts/${formData.id}`;
-    try {
-      const response = await fetch(url, {
-        method: "PUT",
-        body: JSON.stringify(formData),
-        headers: {
-          "Content-Type": "application/json ; charset=UTF-8",
-        },
-       
-      });
-      if (response.ok) {
-        onUpdate(formData);
-        console.log ("success");
-        onClose();
-
-        setRows((prevRows) =>
-          prevRows.map((row) => {
-            if (row.id === formData.id) {
-              return rowData;
-            }
-            return row;
-          })
-        );
-      } else {
-        console.log("failed to update");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
+  const {handleUpdate,handleSubmit,formData,setFormData,}=useUpdatePostModal(onUpdate,onClose)
+  //yahan meny component k custom hook ko data send ka hy 
+  
   
 
   return (

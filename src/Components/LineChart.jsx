@@ -7,7 +7,7 @@ const LineChart = ({ id }) => {
     const options = {
       chart: {
         redrawOnParentResize: true,
-        // width: 150,
+        width: 150,
         height: 120,
         type: "line",
         stacked: false,
@@ -47,6 +47,7 @@ const LineChart = ({ id }) => {
           enabled: false,
         },
       },
+      
       yaxis: {
         show: false,
         labels: {

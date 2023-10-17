@@ -49,6 +49,7 @@ const AddPostModal = ({isOpen, onClose,onAddPost}) => {
         }catch (error){
             console.log(error)
         }
+      
     }
   return (
     <Modal
@@ -63,6 +64,7 @@ const AddPostModal = ({isOpen, onClose,onAddPost}) => {
         timeout: 500,
       },
     }}
+    
   >
     <Fade in={isOpen}>
       <Box noValidate sx={style}>
