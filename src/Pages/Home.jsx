@@ -8,8 +8,6 @@ import PieChart from "../Components/PieChart";
 import LineChart from "../Components/LineChart";
 
 const Home = () => {
-  console.log(ChartData, "chartdata");
-
   const [UserData, setUserData] = useState({
     labels: ChartData.map((data) => data.year),
     dataset: [
@@ -19,7 +17,6 @@ const Home = () => {
       },
     ],
   });
-  console.log(UserData, "chart");
 
   const topCards = [
     { title: "Offer", value: "$100" },

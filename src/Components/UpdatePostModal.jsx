@@ -21,7 +21,7 @@ const UpdatePostModal = ({ onClose, isOpen, data, onUpdate }) => {
     setFormData({ ...data });
   }, [data]);
 
-  console.log(formData, "formData");
+  // .log(formData, "formData");
   const handleUpdate = (e) => {
     const { name, value } = e.target;
 
@@ -30,14 +30,15 @@ const UpdatePostModal = ({ onClose, isOpen, data, onUpdate }) => {
       [name]: value,
     });
   };
-  console.log(data, "user data ");
 
-  const handleSubmit = async (formData) => {
+
+  const handleSubmit = async () => {
+    
     const url = `https://jsonplaceholder.typicode.com/posts/${formData.id}`;
     try {
       const response = await fetch(url, {
         method: "PUT",
-        body: JSON.stringify(FORMdata),
+        body: JSON.stringify(formData),
         headers: {
           "Content-Type": "application/json ; charset=UTF-8",
         },
@@ -45,6 +46,7 @@ const UpdatePostModal = ({ onClose, isOpen, data, onUpdate }) => {
       });
       if (response.ok) {
         onUpdate(formData);
+        console.log ("success");
         onClose();
 
         setRows((prevRows) =>
@@ -82,7 +84,7 @@ const UpdatePostModal = ({ onClose, isOpen, data, onUpdate }) => {
         <Box noValidate sx={style}>
           <Typography>Update post Info.</Typography>
           <Grid container spacing={2}>
-            <Grid item xs={6}>
+            <Grid item xs={12}>
               <TextField
                 margin="normal"
                 label="User ID"
@@ -94,21 +96,10 @@ const UpdatePostModal = ({ onClose, isOpen, data, onUpdate }) => {
                 autoFocus
               />
             </Grid>
-            <Grid item xs={6}>
+         <Grid item xs={12}>
               <TextField
                 margin="normal"
-                label="Post Id"
-                name="id"
-                required
-                fullWidth
-                value={formData.id}
-                onChange={handleUpdate}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                margin="normal"
-                label="Phone"
+                label="Title"
                 required
                 fullWidth
                 multiline

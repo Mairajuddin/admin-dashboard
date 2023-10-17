@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Box, Grid, Button, Typography, Modal, Fade } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { DataGrid } from "@mui/x-data-grid";
-import RuleIcon from "@mui/icons-material/Rule";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import { ContactPageSharp, DeleteOutline } from "@mui/icons-material";
+// import RuleIcon from "@mui/icons-material/Rule";
+// import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+// import { ContactPageSharp, DeleteOutline } from "@mui/icons-material";
 import Backdrop from "@mui/material/Backdrop";
 import DeletePostModal from "../Components/DeletePostModal";
 import UpdatePostModal from "../Components/UpdatePostModal";
+import AddPostModal from "../Components/AddPostModal";
+import usePost from './usePost'
 
 const style = {
   position: "absolute",
@@ -100,154 +102,24 @@ const ViewModal = ({ isOpen, onClose, data }) => {
 };
 
 const Posts = () => {
-  const [Rows, setRows] = useState([]);
-  const [openModal, setOpenModal] = useState(false);
-  const [rowData, setRowData] = useState([]);
-  const [OpenDeleteModal, setOpenDeleteModal] = useState(false);
-  const[openUpdateModal,setOpenUpdateModal]=useState(false)
   
+const {
+  openModal,
+  rowData, 
+  OpenDeleteModal,
+  openUpdateModal,
+  openAddModal, setOpenAddModal,
+  columns,
+  GetFecthData,
+  handleUpdate,
+  GridRows,
+  handleClose,
+  handleDelete,
+  handleAddPost}=usePost()
 
-  const columns = [
-    { field: "id", headerName: "ID", flex: 1, minWidth: 70 },
-    { field: "userId", headerName: "User ID", flex: 1 },
-    { field: "title", headerName: "Title", flex: 2, minWidth: 170 },
-    { field: "body", headerName: "Body", flex: 2 },
-    {
-      field: "action",
-      headerName: "Actions",
-      flex: 2,
-      renderCell: (params) => (
-        <div>
-          <VisibilityOutlinedIcon
-            style={{ cursor: "pointer", marginRight: "20px" }}
-            onClick={() => handleView(params.row)}
-          />
-          <RuleIcon style={{ cursor: "pointer", marginRight: "20px" }}
-          onClick={() => {
-            setRowData(params.row);
-            setOpenUpdateModal(true);
-          }}
-          />
-          <DeleteOutline
-            style={{ cursor: "pointer" }}
-            onClick={() => {
-              setRowData(params.row);
-              setOpenDeleteModal(true);
-            }}
-          />
-        </div>
-      ),
-    },
-  ];
-  const GetFecthData = async () => {
-    const url = "https://jsonplaceholder.typicode.com/posts";
-    try {
-      const response = await fetch(url, {
-        method: "Get",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await response.json();
-      console.log(data, "post data here");
-      setRows(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
+    useEffect(() => {
     GetFecthData();
   }, []);
-
-  const GridRows = Rows.map((row) => ({
-    id: row.id,
-    userId: row.userId,
-    title: row.title,
-    body: row.body,
-  }));
-
-  const handleView = (row) => {
-    setOpenModal(true);
-    setRowData(row);
-  };
-  const handleClose = () => {
-    setOpenModal(false);
-    setOpenDeleteModal(false);
-    setOpenUpdateModal(false);
-  };
-  const handleDelete = async () => {
-    const url = `https://jsonplaceholder.typicode.com/posts/${rowData.id}`;
-    try {
-      const response = await fetch(url, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (response.ok) {
-        setRows((prevRows) =>
-          prevRows.filter((row) => row.id !== rowData.id)
-        );
-        setRows((prevRows) =>
-          prevRows.map((row, index) => ({
-            ...row,
-            id: index + 1,
-          }))
-        );
-        setOpenDeleteModal(false);
-      } else {
-        console.log("failed to delete");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const handleUpdate = (updatedData) => {
-    // Update the rows in your state
-    setRows((prevRows) =>
-      prevRows.map((row) => (row.id === updatedData.id ? updatedData : row))
-    );
-  };
-  // const handleUpdate= async ()=>{
-  //   const url  =`https://jsonplaceholder.typicode.com/posts/${rowData.id}`
-  //   try{
-  //     const response= await fetch (url,{
-  //       method:'PUT',
-  //       headers:{
-  //         'Content-Type':'application/json ; charset=UTF-8',
-  //       },
-  //       body:JSON.stringify({
-  //         id:rowData.id,
-  //         title:rowData.title,
-  //         body:rowData.body,
-  //         userId:rowData.userId
-  //       }),
-  //    })
-  //    if (response.ok){
-  //     console.log('its working success')
-  //     rowData.userID=response.data.userId;
-  //     rowData.title=response.data.title;
-  //     rowData.body=response.data.body;
-  //     console.log('success')
-  //     handleClose()
-
-  //     setRows((prevRows)=>prevRows.map((row,index)=>{
-  //       if(row.id===rowData.id){
-  //         return rowData
-  //       }
-  //       return row;
-  //     }))
-
-
-  //    } else{
-  //     console.log('failed to update')
-  //    }
-
-  //   }catch(error){
-  //     console.log('error',error)
-
-  //   }
-  // }
 
   return (
     <Box style={{ padding: "20px" }}>
@@ -261,6 +133,7 @@ const Posts = () => {
           <Button
             variant="contained"
             style={{ float: "right", marginRight: "20px" }}
+            onClick={() => setOpenAddModal(true)}
           >
             Add User
           </Button>
@@ -271,7 +144,7 @@ const Posts = () => {
           initialState={{
             pagination: {
               paginationModel: {
-                pageSize: 5,
+                pageSize: 7,
               },
             },
           }}
@@ -299,6 +172,11 @@ const Posts = () => {
         onClose={handleClose}
         onUpdate={handleUpdate}
         data={rowData}
+        />
+        <AddPostModal
+        isOpen={openAddModal}
+        onClose={handleClose}
+        onAddPost={handleAddPost}
         />
     </Box>
   );
