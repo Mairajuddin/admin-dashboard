@@ -3,11 +3,10 @@ import { Box, Grid, Button, Typography, Modal, Fade } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { DataGrid } from "@mui/x-data-grid";
 // import RuleIcon from "@mui/icons-material/Rule";
-// import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-// import { ContactPageSharp, DeleteOutline } from "@mui/icons-material";
 import Backdrop from "@mui/material/Backdrop";
 import usePost from "./usePost";
 import DeletePostModal from "../Components/DeletePostModal";
+import AddPostModal from "../Components/AddPostModal";
 
 const style = {
   position: "absolute",
@@ -108,31 +107,22 @@ const Posts = () => {
     columns,
     GridRows,
     handleClose,
+    OpenDeleteModal,
+    handleDelete,
+    openAddModal,
+    setOpenAddModal,
+    handleAddPost
     // Posts,
-      OpenDeleteModal,
     //   openUpdateModal,
-    // openAddModal,
-    //  setOpenAddModal,
     //   GetFecthData,
     //   handleUpdate,
-      handleDelete,
-    // handleAddPost
   } = usePost();
 
   //   useEffect(() => {
   //   GetFecthData();
   // }, []);
 
-  // useEffect(()=>{
-  //   dispatch(fetchPosts())
-  // },[])
-
-  // useEffect(() => {
-  //   // This effect will run when the 'posts' variable changes
-  //   console.log(posts, 'redux sy arhi');
-  // }, [posts]);
-
-  return (
+   return (
     <Box style={{ padding: "20px" }}>
       <Grid container spacing={2} style={{ padding: "20px" }}>
         <Grid item xs={8}>
@@ -183,12 +173,12 @@ const Posts = () => {
         onClose={handleClose}
         onUpdate={handleUpdate}
         data={rowData}
-        />
+        />*/}
         <AddPostModal
         isOpen={openAddModal}
         onClose={handleClose}
         onAddPost={handleAddPost}
-        /> */}
+        /> 
     </Box>
   );
 };

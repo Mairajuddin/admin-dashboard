@@ -21,6 +21,16 @@ export const DeleteFetchPosts=createAsyncThunk('posts/DeleteFetchPosts',async(po
     const data=await response.json();
     return data
     })
+export const AddFetchPosts=createAsyncThunk('posts/AddFetchPosts',async(newpost)=>{
+    console.log(newpost,'newpost add ka data')
+    const response=await fetch('https://jsonplaceholder.typicode.com/posts',{
+        method:'POST',
+        body:JSON.stringify(newpost),
+        headers:{'Content-type':'application/json'}
+    });
+    const data=await response.json();
+    return data
+    })
    
 const postSlice=createSlice({
     name:'posts',
@@ -42,8 +52,7 @@ const postSlice=createSlice({
         })
         .addCase(DeleteFetchPosts.pending,(state)=>{
             state.status='loading...'
-
-            
+           
         })
         .addCase(DeleteFetchPosts.fulfilled,(state,action)=>{
             state.status='success'
@@ -55,6 +64,22 @@ const postSlice=createSlice({
             state.status='failed'
             state.error=action.error.message
         })
+        .addCase(AddFetchPosts.pending,(state)=>{
+             state.status='loading...'
+     })
+     .addCase(AddFetchPosts.fulfilled,(state,action)=>{
+        // let newPosts=[...state.posts,action.payload]
+        // state.posts=newPosts
+        
+        state.posts=[action.payload,...state.posts]
+        console.log('action working',action)
+         state.status='success'
+                 
+     })
+     .addCase(AddFetchPosts.rejected,(state)=>{
+         state.status='failed'
+         state.error=action.error.message
+     })
 
     }
 })

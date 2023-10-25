@@ -2,6 +2,9 @@ import React,{useState ,useEffect} from 'react'
 import { Box, Grid, Button, Typography, Modal, Fade } from "@mui/material";
 import Backdrop from "@mui/material/Backdrop";
 import TextField from "@mui/material/TextField";
+import { AddFetchPosts } from "../store/postSlice";
+
+import {useSelector,useDispatch} from 'react-redux'
 
 
 const style = {
@@ -16,6 +19,12 @@ const style = {
     p: 4,
   };
 const AddPostModal = ({isOpen, onClose,onAddPost}) => {
+
+  const post = useSelector((state) => state.posts.posts);
+ const dispatch = useDispatch();
+
+
+
     const [addPost, setAddPost] = useState({
         userId: "",
         title: "",
@@ -30,27 +39,41 @@ const AddPostModal = ({isOpen, onClose,onAddPost}) => {
         })
         console.log(addPost, "addPost");
     }
-    const handleSubmit = async () => {
-        const url="https://jsonplaceholder.typicode.com/posts";
-        try{
-            const  response= await fetch(url,{
-                method:'POST',
-                body:JSON.stringify(addPost),
-                headers:{
-                    'Content-type': 'application/json; charset=UTF-8'
-                }
-            })
-            if (response.ok){
-                console.log("success");
-                const newPost=await response.json()
-                onAddPost(newPost);
-                onClose();
-            }
-        }catch (error){
-            console.log(error)
-        }
-      
+    const handleSubmit =   async () => {
+      const newPost={
+        userId:addPost.userId,
+        title:addPost.title,
+        body:addPost.body,
+      }
+      console.log(newPost,'newPost')
+      dispatch(AddFetchPosts(newPost));
+      onClose();
+     
     }
+useEffect(()=>{
+  handleSubmit()
+},[])
+    // const handleSubmit = async () => {
+    //     const url="https://jsonplaceholder.typicode.com/posts";
+    //     try{
+    //         const  response= await fetch(url,{
+    //             method:'POST',
+    //             body:JSON.stringify(addPost),
+    //             headers:{
+    //                 'Content-type': 'application/json; charset=UTF-8'
+    //             }
+    //         })
+    //         if (response.ok){
+    //             console.log("success");
+    //             const newPost=await response.json()
+    //             onAddPost(newPost);
+    //             onClose();
+    //         }
+    //     }catch (error){
+    //         console.log(error)
+    //     }
+      
+    // }
   return (
     <Modal
     aria-labelledby="transition-modal-title"
