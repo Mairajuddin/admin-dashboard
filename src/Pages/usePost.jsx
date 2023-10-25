@@ -2,6 +2,10 @@ import { useState,useEffect } from "react";
 import RuleIcon from "@mui/icons-material/Rule";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { ContactPageSharp, DeleteOutline } from "@mui/icons-material";
+import {useDispatch,useSelector} from 'react-redux'
+import { fetchPosts } from "../store/postSlice";
+import { DeleteFetchPosts } from "../store/postSlice";
+
 
 const usePost=()=>{
     const [Rows, setRows] = useState([]);
@@ -10,6 +14,9 @@ const usePost=()=>{
     const [OpenDeleteModal, setOpenDeleteModal] = useState(false);
     const[openUpdateModal,setOpenUpdateModal]=useState(false)
     const [openAddModal, setOpenAddModal] = useState(false);
+
+    const dispatch=useDispatch()
+    const Posts=useSelector(state=>state.posts.posts)
 
     const columns = [
         { field: "id", headerName: "ID", flex: 1, minWidth: 70 },
@@ -37,28 +44,13 @@ const usePost=()=>{
                 onClick={() => {
                   setRowData(params.row);
                   setOpenDeleteModal(true);
+                
                 }}
               />
             </div>
           ),
         },
       ];
-
-      const GetFecthData = async () => {
-        const url = "https://jsonplaceholder.typicode.com/posts";
-        try {
-          const response = await fetch(url, {
-            method: "Get",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          const data = await response.json();
-          setRows(data);
-        } catch (error) {
-          console.log(error);
-        }
-      };
       
       const handleUpdate = (formData) => {
         // Update the row data in the parent component's state
@@ -72,12 +64,12 @@ const usePost=()=>{
         );
       };
     
-      const GridRows = Rows.map((row) => ({
+      const GridRows = Posts.length>0 ?Posts.map((row) => ({
         id: row.id,
         userId: row.userId,
         title: row.title,
         body: row.body,
-      }));
+      })):[];
     
       const handleView = (row) => {
         setOpenModal(true);
@@ -89,33 +81,15 @@ const usePost=()=>{
         setOpenUpdateModal(false);
         setOpenAddModal(false);
       };
-      const handleDelete = async () => {
-        const url = `https://jsonplaceholder.typicode.com/posts/${rowData.id}`;
-        try {
-          const response = await fetch(url, {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          if (response.ok) {
-            setRows((prevRows) =>
-              prevRows.filter((row) => row.id !== rowData.id)
-            );
-            setRows((prevRows) =>
-              prevRows.map((row, index) => ({
-                ...row,
-                id: index + 1,
-              }))
-            );
-            setOpenDeleteModal(false);
-          } else {
-            console.log("failed to delete");
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      };
+     
+   
+      const handleDelete = () => {
+        dispatch(DeleteFetchPosts(rowData['id']));
+        setOpenDeleteModal(false);
+
+      }
+      
+      
       const handleAddPost =  (newPost) => {
         setRows((prevRows) => [newPost, ...prevRows ]);
         setRows((prevRows) =>
@@ -124,14 +98,13 @@ const usePost=()=>{
                 id: index + 1,
               }))
             );
-           
-        
       }
 
-      // useEffect(() => {
-      //   GetFecthData();
-      // }, []);
-
+     
+      useEffect(() => {
+        dispatch(fetchPosts());
+      }, []);
+      
       return{
         Rows, setRows, 
         openModal, setOpenModal,
@@ -140,13 +113,15 @@ const usePost=()=>{
         openUpdateModal,setOpenUpdateModal,
         openAddModal, setOpenAddModal,
         columns,
-        GetFecthData,
         handleUpdate,
         GridRows,
         handleView,
         handleClose,
         handleDelete,
-        handleAddPost
+        handleAddPost,
+         useEffect,
+         Posts,
+
       }
 }
 

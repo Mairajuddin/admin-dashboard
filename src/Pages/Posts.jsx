@@ -6,10 +6,8 @@ import { DataGrid } from "@mui/x-data-grid";
 // import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 // import { ContactPageSharp, DeleteOutline } from "@mui/icons-material";
 import Backdrop from "@mui/material/Backdrop";
+import usePost from "./usePost";
 import DeletePostModal from "../Components/DeletePostModal";
-import UpdatePostModal from "../Components/UpdatePostModal";
-import AddPostModal from "../Components/AddPostModal";
-import usePost from './usePost'
 
 const style = {
   position: "absolute",
@@ -102,24 +100,37 @@ const ViewModal = ({ isOpen, onClose, data }) => {
 };
 
 const Posts = () => {
-  
-const {
-  openModal,
-  rowData, 
-  OpenDeleteModal,
-  openUpdateModal,
-  openAddModal, setOpenAddModal,
-  columns,
-  GetFecthData,
-  handleUpdate,
-  GridRows,
-  handleClose,
-  handleDelete,
-  handleAddPost}=usePost()
 
-    useEffect(() => {
-    GetFecthData();
-  }, []);
+  const {
+    openModal,
+    rowData,
+    Posts,
+    columns,
+    GridRows,
+    handleClose,
+    // Posts,
+      OpenDeleteModal,
+    //   openUpdateModal,
+    // openAddModal,
+    //  setOpenAddModal,
+    //   GetFecthData,
+    //   handleUpdate,
+      handleDelete,
+    // handleAddPost
+  } = usePost();
+
+  //   useEffect(() => {
+  //   GetFecthData();
+  // }, []);
+
+  // useEffect(()=>{
+  //   dispatch(fetchPosts())
+  // },[])
+
+  // useEffect(() => {
+  //   // This effect will run when the 'posts' variable changes
+  //   console.log(posts, 'redux sy arhi');
+  // }, [posts]);
 
   return (
     <Box style={{ padding: "20px" }}>
@@ -161,13 +172,13 @@ const {
         data={rowData}
         onClose={handleClose}
       />
-      <DeletePostModal
+       <DeletePostModal
         isOpen={OpenDeleteModal}
         onClose={handleClose}
         onDelete={handleDelete}
         data={rowData}
       />
-      <UpdatePostModal
+      {/*<UpdatePostModal
         isOpen={openUpdateModal}
         onClose={handleClose}
         onUpdate={handleUpdate}
@@ -177,7 +188,7 @@ const {
         isOpen={openAddModal}
         onClose={handleClose}
         onAddPost={handleAddPost}
-        />
+        /> */}
     </Box>
   );
 };
