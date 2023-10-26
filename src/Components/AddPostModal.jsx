@@ -39,7 +39,8 @@ const AddPostModal = ({isOpen, onClose,onAddPost}) => {
         })
         console.log(addPost, "addPost");
     }
-    const handleSubmit =   async () => {
+    const handleSubmit = async () => {
+      // const newUserId = addPost.id.length > 0 ? Math.max(...Posts.map((row) => row.id))+1 : 1;
       const newPost={
         userId:addPost.userId,
         title:addPost.title,
@@ -47,12 +48,16 @@ const AddPostModal = ({isOpen, onClose,onAddPost}) => {
       }
       console.log(newPost,'newPost')
       dispatch(AddFetchPosts(newPost));
+      setAddPost({
+        userId: "",
+        title: "",
+        body: "",
+      })
       onClose();
-     
-    }
-useEffect(()=>{
-  handleSubmit()
-},[])
+     }
+// useEffect(()=>{
+//   handleSubmit()
+// },[])
     // const handleSubmit = async () => {
     //     const url="https://jsonplaceholder.typicode.com/posts";
     //     try{

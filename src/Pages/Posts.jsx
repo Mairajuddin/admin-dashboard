@@ -7,7 +7,7 @@ import Backdrop from "@mui/material/Backdrop";
 import usePost from "./usePost";
 import DeletePostModal from "../Components/DeletePostModal";
 import AddPostModal from "../Components/AddPostModal";
-
+import UpdatePostModal from "../Components/UpdatePostModal";
 const style = {
   position: "absolute",
   top: "50%",
@@ -111,11 +111,11 @@ const Posts = () => {
     handleDelete,
     openAddModal,
     setOpenAddModal,
-    handleAddPost
+    handleAddPost,
     // Posts,
-    //   openUpdateModal,
+      openUpdateModal,
     //   GetFecthData,
-    //   handleUpdate,
+      handleUpdate,
   } = usePost();
 
   //   useEffect(() => {
@@ -168,12 +168,14 @@ const Posts = () => {
         onDelete={handleDelete}
         data={rowData}
       />
-      {/*<UpdatePostModal
+      <UpdatePostModal
         isOpen={openUpdateModal}
         onClose={handleClose}
         onUpdate={handleUpdate}
         data={rowData}
-        />*/}
+        // setRows={setRows}
+        // Rows={Rows}
+         />
         <AddPostModal
         isOpen={openAddModal}
         onClose={handleClose}

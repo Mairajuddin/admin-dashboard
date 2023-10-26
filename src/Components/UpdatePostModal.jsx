@@ -16,13 +16,12 @@ const style = {
   p: 4,
 };
 
-const UpdatePostModal = ({ onClose, isOpen, data, onUpdate }) => {
+const UpdatePostModal = ({ onClose, isOpen, data, onUpdate, }) => {
   useEffect(() => {
     setFormData({ ...data });
   }, [data]);
 
-  const {handleUpdate,handleSubmit,formData,setFormData,}=useUpdatePostModal(onUpdate,onClose)
-  //yahan meny component k custom hook ko data send ka hy 
+  const {handleUpdate,handleSubmit,formData,setFormData,}=useUpdatePostModal(onUpdate,onClose,data)
   
   
 
@@ -87,7 +86,7 @@ const UpdatePostModal = ({ onClose, isOpen, data, onUpdate }) => {
               <Button
                 variant="contained"
                 style={{ width: "100%" }}
-                onClick={handleSubmit}
+                onClick={()=>handleSubmit(formData)}
               >
                 Update..
               </Button>

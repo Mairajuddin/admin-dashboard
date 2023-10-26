@@ -55,21 +55,24 @@ const usePost = () => {
     setRows((prevRows) =>
       prevRows.map((row) => {
         if (row.id === formData.id) {
+          console.log( Rows,'success update')
           return formData;
         }
         return row;
       })
     );
   };
-
   const GridRows =
     Posts.length > 0
-      ? Posts.map((row, index) => ({
-          id: index + 1,
+      ? Posts.map((row) => {
+        // console.log(row)
+        return {
+          id: row.id,
           userId: row.userId,
           title: row.title,
           body: row.body,
-        }))
+        };
+      })
       : [];
 
   const handleView = (row) => {
@@ -84,6 +87,7 @@ const usePost = () => {
   };
 
   const handleDelete = () => {
+    console.log(rowData)
     dispatch(DeleteFetchPosts(rowData["id"]));
     setOpenDeleteModal(false);
   };

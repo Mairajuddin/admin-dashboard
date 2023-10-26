@@ -14,6 +14,7 @@ export const fetchPosts=createAsyncThunk('posts/fetchPosts',async()=>{
 })
 
 export const DeleteFetchPosts=createAsyncThunk('posts/DeleteFetchPosts',async(postId)=>{
+    console.log(postId,'postId')
     const response=await fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`,{
         method:'DELETE',
         headers:{'Content-type':'application/json'}
@@ -29,9 +30,26 @@ export const AddFetchPosts=createAsyncThunk('posts/AddFetchPosts',async(newpost)
         headers:{'Content-type':'application/json'}
     });
     const data=await response.json();
+    console.log(data,'data')
     return data
     })
    
+
+export const  UpdateFetchPosts=createAsyncThunk('posts/UpdateFetchPosts',async(post)=>{
+    console.log(post,'post')
+    const response = await fetch(`https://jsonplaceholder.typicode.com/posts/${post.id}`, {
+        method: "PUT",
+        body: JSON.stringify(post),
+        headers: {
+          "Content-Type": "application/json ; charset=UTF-8",
+        },
+    })
+    const data = await response.json();
+    console.log('update ja data',data)
+    return data;
+
+})
+
 const postSlice=createSlice({
     name:'posts',
     initialState,
@@ -46,7 +64,7 @@ const postSlice=createSlice({
             state.status='success'
             state.posts=action.payload;
         })
-        .addCase(fetchPosts.rejected,(state)=>{
+        .addCase(fetchPosts.rejected,(state,action)=>{
             state.status='failed'
             state.error=action.error.message
         })
@@ -68,9 +86,7 @@ const postSlice=createSlice({
              state.status='loading...'
      })
      .addCase(AddFetchPosts.fulfilled,(state,action)=>{
-        // let newPosts=[...state.posts,action.payload]
-        // state.posts=newPosts
-        
+        console.log(action.payload,">>")
         state.posts=[action.payload,...state.posts]
         console.log('action working',action)
          state.status='success'
@@ -80,6 +96,15 @@ const postSlice=createSlice({
          state.status='failed'
          state.error=action.error.message
      })
+     .addCase(UpdateFetchPosts.pending,(state)=>{
+        state.status='loading...'
+     })
+     .addCase(UpdateFetchPosts.fulfilled,(state,action)=>{
+         console.log('action working',action.payload)
+        state.posts=[...state.posts,action.payload]
+         state.status='success'
+     }
+     )
 
     }
 })
